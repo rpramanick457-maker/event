@@ -1,0 +1,27 @@
+# Composer dependencies
+/vendor/
+
+# User configurations & secrets
+/config.php
+
+# IDE & system files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# User uploaded screenshots and generated outputs
+/uploads/certificates/*
+!/uploads/certificates/.gitkeep
+
+/uploads/payment_receipts/*
+!/uploads/payment_receipts/.gitkeep
+
+/uploads/qrcodes/*
+!/uploads/qrcodes/.gitkeep
+
+/uploads/reports/*
+!/uploads/reports/.gitkeep
+
+/uploads/templates/*
+!/uploads/templates/.gitkeep

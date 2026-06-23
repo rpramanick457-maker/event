@@ -1,0 +1,20 @@
+{
+  "name": "Nexus Scanner",
+  "short_name": "Nexus Scan",
+  "description": "Universal QR Code scanner for Nexus event helpers",
+  "start_url": "/event/helper_scanner.php",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#130E0A",
+  "theme_color": "#FFA852",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23130E0A'/><text y='.9em' font-size='80' x='10'>📡</text></svg>",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["utilities", "productivity"],
+  "screenshots": []
+}
