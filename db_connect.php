@@ -219,7 +219,7 @@ try {
     $stmt = $conn->prepare("SELECT COUNT(*) FROM `users` WHERE `role` = 'admin'");
     $stmt->execute();
     if ($stmt->fetchColumn() == 0) {
-        $admin_email = 'rpramanick457@gmail.com';
+        $admin_email = 'admin@event.com';
         $admin_pass = password_hash('admin123', PASSWORD_DEFAULT);
         $admin_name = 'System Administrator';
         

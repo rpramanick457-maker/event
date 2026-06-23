@@ -83,7 +83,7 @@ On first load, the system will automatically create the database `event_db`, cre
 
 ### 6. Admin Credentials
 To log in as administrator and manage the application:
-*   **Email:** `rpramanick457@gmail.com`
+*   **Email:** `admin@event.com`
 *   **Password:** `admin123`
 
 ---
