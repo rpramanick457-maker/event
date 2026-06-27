@@ -1,18 +1,18 @@
 <?php
 // test_db.php
 // Highly optimized visual brute-force connection tool running on Vercel
-// Checks 27 combinations for the ambiguous vertical lines in the password
+// Checks 27 combinations for the database name 'bvqic99mcyclwpnsxcmo' (with 'l')
 
 header('Content-Type: text/plain; charset=utf-8');
 
 $host = "bvqic99mcyc1wpnsxcmo-mysql.services.clever-cloud.com";
-$dbname = "bvqic99mcyc1wpnsxcmo"; // Correct DB Name with '1'
+$dbname = "bvqic99mcyclwpnsxcmo"; // Database Name with 'l'
 $user = "utuqkgdc0qznvfok";
 
 // Vertical lines (l1, l2, l3) in "qzw6G8CFofV [l1] q5C [l2] Aef [l3]"
 $l_options = ['l', '1', 'I'];
 
-echo "Starting optimized brute force (27 combinations)...\n";
+echo "Starting optimized brute force (27 combinations with DB_NAME containing 'l')...\n";
 
 $count = 0;
 foreach ($l_options as $l1) {
