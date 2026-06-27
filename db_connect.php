@@ -1,8 +1,5 @@
 <?php
-if (!file_exists(__DIR__ . '/config.php')) {
-    die("Error: config.php is missing. Please copy config.example.php to config.php and fill in your details.");
-}
-require_once __DIR__ . '/config.php';
+require_once __DIR__ . '/config_loader.php';
 
 $host = DB_HOST;
 $port = DB_PORT;
@@ -11,15 +8,26 @@ $pass = DB_PASS;
 $dbname = DB_NAME;
 
 try {
-    // Connect to MySQL server (without selecting DB)
-    $conn = new PDO("mysql:host=$host;port=$port", $user, $pass, [
+    // Attempt 1: Try connecting directly to the database first (needed for cloud DBs where CREATE DATABASE is not allowed)
+    $conn = new PDO("mysql:host=$host;port=$port;dbname=$dbname", $user, $pass, [
         PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true
     ]);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    
-    // Create DB if not exists
-    $conn->exec("CREATE DATABASE IF NOT EXISTS `$dbname` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
-    $conn->exec("USE `$dbname`");
+} catch (PDOException $e) {
+    // Attempt 2: If connecting directly failed (maybe DB doesn't exist), try to connect to the host and create database
+    try {
+        $conn = new PDO("mysql:host=$host;port=$port", $user, $pass, [
+            PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true
+        ]);
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        
+        // Create DB if not exists
+        $conn->exec("CREATE DATABASE IF NOT EXISTS `$dbname` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+        $conn->exec("USE `$dbname`");
+    } catch (PDOException $e2) {
+        throw new PDOException("Database connection failed: " . $e->getMessage() . " | " . $e2->getMessage(), (int)$e2->getCode());
+    }
+}
     
     // Create tables
     $conn->exec("CREATE TABLE IF NOT EXISTS `users` (

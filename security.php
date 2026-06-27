@@ -10,10 +10,7 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-if (!file_exists(__DIR__ . '/config.php')) {
-    die("Error: config.php is missing. Please copy config.example.php to config.php and fill in your details.");
-}
-require_once __DIR__ . '/config.php';
+require_once __DIR__ . '/config_loader.php';
 
 // ─── AES-256 Encryption Key ────────────────────────────────────────────────
 // This is the secret key used to encrypt/decrypt sensitive student data.

@@ -90,6 +90,11 @@ function renderOTPToast() {
  * Triggers sending an OTP email asynchronously in the background.
  */
 function triggerAsyncOTP($email, $otp, $type = 'Registration') {
+    // If running on Vercel or if popen function is disabled, run synchronously
+    if (getenv('VERCEL') || !function_exists('popen')) {
+        return sendMockOTP($email, $otp, $type);
+    }
+
     // Escape arguments for the command line
     $cmd = "php " . escapeshellarg(__DIR__ . "/send_email_async.php") . " " . escapeshellarg($email) . " " . escapeshellarg($otp) . " " . escapeshellarg($type);
     
