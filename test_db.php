@@ -1,47 +1,37 @@
 <?php
 // test_db.php
-// Diagnostic brute-force checking user variations and password variations on Vercel
+// Extremely fast diagnostic checking only 6 most likely variations
 
 header('Content-Type: text/plain; charset=utf-8');
 
 $host = "bvqic99mcyc1wpnsxcmo-mysql.services.clever-cloud.com";
+$dbname = "bvqic99mcyc1wpnsxcmo"; // Correct DB name with '1'
+$user = "utuqkgdc0qznvfok";
 
-// Try both usernames: 'utuqkgdc0qznvfok' (with 0) and 'utuqkgdcoqznvfok' (with o)
-$users = ["utuqkgdc0qznvfok", "utuqkgdcoqznvfok"];
+// The 6 most likely password candidates
+$candidates = [
+    "qzw6G8CFofVlq5ClAefl", // Candidate 1 (all lowercase L)
+    "qzw6G8CFofV1q5C1Aef1", // Candidate 2 (all digit 1)
+    "qzw6G8CFofVIq5CIAefI", // Candidate 3 (all uppercase I)
+    "qzw6G8CFofV1q5ClAefl", // Candidate 4 (first is 1, rest L)
+    "qzw6G8CFofVlq5C1Aefl", // Candidate 5 (middle is 1, rest L)
+    "qzw6G8CFofVlq5ClAef1"  // Candidate 6 (last is 1, rest L)
+];
 
-// Try both database names just in case
-$dbnames = ["bvqic99mcyc1wpnsxcmo", "bvqic99mcyclwpnsxcmo"];
+echo "Starting rapid Candidate test (6 passwords)...\n";
 
-// Vertical lines (l1, l2, l3) in "qzw6G8CFofV [l1] q5C [l2] Aef [l3]"
-$l_options = ['l', '1', 'I'];
-
-echo "Starting user & password diagnostic brute force (108 combinations)...\n";
-
-$count = 0;
-foreach ($users as $user) {
-    foreach ($dbnames as $dbname) {
-        foreach ($l_options as $l1) {
-            foreach ($l_options as $l2) {
-                foreach ($l_options as $l3) {
-                    $count++;
-                    $pass = "qzw6G8CFofV" . $l1 . "q5C" . $l2 . "Aef" . $l3;
-                    try {
-                        $conn = new PDO("mysql:host=$host;port=3306;dbname=$dbname", $user, $pass, [
-                            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                            PDO::ATTR_TIMEOUT => 1
-                        ]);
-                        echo "SUCCESS!\n";
-                        echo "USER: $user\n";
-                        echo "DB_NAME: $dbname\n";
-                        echo "PASSWORD: $pass\n";
-                        exit;
-                    } catch (PDOException $e) {
-                        // Fail and continue
-                    }
-                }
-            }
-        }
+foreach ($candidates as $pass) {
+    echo "Testing: $pass\n";
+    try {
+        $conn = new PDO("mysql:host=$host;port=3306;dbname=$dbname", $user, $pass, [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_TIMEOUT => 2
+        ]);
+        echo "✔ SUCCESS! PASSWORD IS: $pass\n";
+        exit;
+    } catch (PDOException $e) {
+        echo "✘ Failed for: $pass - " . $e->getMessage() . "\n";
     }
 }
 
-echo "Finished 108 combinations. No credentials worked.\n";
+echo "None of the 6 candidates worked.\n";
