@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/config_loader.php';
+require_once __DIR__ . '/config.php';
 
 $host = DB_HOST;
 $port = DB_PORT;
