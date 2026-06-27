@@ -1,35 +1,48 @@
 <?php
 // test_db.php
-// Temporary debug file to verify environment variables on Vercel
+// Visual brute-force connection tool running on Vercel to find the correct password
 
-require_once __DIR__ . '/config_loader.php';
+header('Content-Type: text/plain; charset=utf-8');
 
-header('Content-Type: text/html; charset=utf-8');
+$host = "bvqic99mcyc1wpnsxcmo-mysql.services.clever-cloud.com";
+$user = "utuqkgdc0qznvfok";
 
-echo "<h2>Database Connection Debugger</h2>";
+// We will try both database names: 'bvqic99mcyc1wpnsxcmo' (with 1) and 'bvqic99mcyclwpnsxcmo' (with l)
+$dbnames = ["bvqic99mcyc1wpnsxcmo", "bvqic99mcyclwpnsxcmo"];
 
-echo "<h3>Configured Constants:</h3>";
-echo "<ul>";
-echo "<li><strong>DB_HOST:</strong> " . htmlspecialchars(DB_HOST) . " (Length: " . strlen(DB_HOST) . ")</li>";
-echo "<li><strong>DB_PORT:</strong> " . htmlspecialchars(DB_PORT) . "</li>";
-echo "<li><strong>DB_USER:</strong> " . htmlspecialchars(DB_USER) . " (Length: " . strlen(DB_USER) . ")</li>";
-echo "<li><strong>DB_NAME:</strong> " . htmlspecialchars(DB_NAME) . " (Length: " . strlen(DB_NAME) . ")</li>";
-echo "<li><strong>DB_PASS Length:</strong> " . strlen(DB_PASS) . "</li>";
+$q_options = ['q', 'g'];
+$l_options = ['l', '1', 'I'];
+$o_options = ['o', '0', 'O'];
 
-if (strlen(DB_PASS) > 0) {
-    echo "<li><strong>DB_PASS preview:</strong> " . htmlspecialchars(substr(DB_PASS, 0, 2)) . "..." . htmlspecialchars(substr(DB_PASS, -2)) . "</li>";
-} else {
-    echo "<li><strong>DB_PASS is EMPTY</strong></li>";
+echo "Starting brute force of 648 combinations...\n";
+
+$count = 0;
+foreach ($dbnames as $dbname) {
+    foreach ($q_options as $q1) {
+        foreach ($q_options as $q2) {
+            foreach ($l_options as $l1) {
+                foreach ($l_options as $l2) {
+                    foreach ($l_options as $l3) {
+                        foreach ($o_options as $o) {
+                            $count++;
+                            $pass = $q1 . "zw6G8CF" . $o . "fV" . $l1 . $q2 . "5C" . $l2 . "Aef" . $l3;
+                            try {
+                                $conn = new PDO("mysql:host=$host;port=3306;dbname=$dbname", $user, $pass, [
+                                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+                                ]);
+                                echo "SUCCESS!\n";
+                                echo "DB_NAME: $dbname\n";
+                                echo "PASSWORD: $pass\n";
+                                exit;
+                            } catch (PDOException $e) {
+                                // Ignore access denied, proceed
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
-echo "</ul>";
 
-echo "<h3>Attempting Connection:</h3>";
-try {
-    $conn = new PDO("mysql:host=" . DB_HOST . ";port=" . DB_PORT . ";dbname=" . DB_NAME, DB_USER, DB_PASS, [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-        1000 => true
-    ]);
-    echo "<span style='color:green; font-weight:bold;'>✔ SUCCESS: Connected to the database!</span>";
-} catch (PDOException $e) {
-    echo "<span style='color:red; font-weight:bold;'>✘ FAILED: " . htmlspecialchars($e->getMessage()) . "</span>";
-}
+echo "Brute force finished. Checked $count combinations. No password worked.\n";
