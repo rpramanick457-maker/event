@@ -2,6 +2,9 @@
 // config_loader.php
 // Dynamically loads configuration from config.php if available, or from environment variables (e.g., on Vercel)
 
+// Disable deprecation warnings (e.g. PHP 8.5 deprecation warnings on Vercel)
+error_reporting(E_ALL & ~E_DEPRECATED);
+
 if (file_exists(__DIR__ . '/config.php')) {
     require_once __DIR__ . '/config.php';
 } else {

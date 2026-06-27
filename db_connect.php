@@ -12,13 +12,13 @@ try {
     try {
         // Attempt 1: Try connecting directly to the database first (needed for cloud DBs where CREATE DATABASE is not allowed)
         $conn = new PDO("mysql:host=$host;port=$port;dbname=$dbname", $user, $pass, [
-            PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true
+            1000 => true
         ]);
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     } catch (PDOException $e) {
         // Attempt 2: If connecting directly failed (maybe DB doesn't exist), try to connect to the host and create database
         $conn = new PDO("mysql:host=$host;port=$port", $user, $pass, [
-            PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true
+            1000 => true
         ]);
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         
